@@ -1,103 +1,148 @@
+"use client";
 import Image from "next/image";
+import { useState } from "react";
 
 export default function Home() {
-  return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const [tasks, setTasks] = useState<{ text: string, done: boolean }[]>([])
+  const [newTask, setNewTask] = useState("")
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+  // Example tasks
+  const exampleTasks = [
+    { text: "Example task #1", done: false },
+    { text: "Example task #2", done: false }
+  ];
+
+  const displayTasks = tasks.length === 0 ? exampleTasks : tasks;
+
+  return <div>
+    <h1
+      style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+      To-Do list</h1>
+    <h3
+      style={{ display: "flex", justifyContent: "center", alignItems: "center", marginBottom: "10px" }}>
+      Add any item you would like to your list and I will keep track of it.</h3>
+
+    <div style={{ display: "flex", justifyContent: "center", alignItems: "center", marginBottom: "16px" }}>
+      <form onSubmit={(event) => {
+        event.preventDefault()
+        if (newTask.trim() === "") return; // optional: ignore empty tasks
+        setTasks([...tasks, { text: newTask, done: false }]);
+        setNewTask(""); // Clear the input after adding the task
+
+      }}>
+        <button
+          type="button"
+          onClick={() => setTasks([])}
+          style={{
+            width: "70px",
+            height: "24px",
+            fontSize: "14px",
+            borderRadius: "4px",
+            cursor: "pointer",
+            alignItems: "center",
+            justifyContent: "center",
+            textAlign: "center", // Center the text
+            padding: 0,          // Remove extra padding
+            display: "inline-block", // Ensure proper centering
+            marginRight: "10px",
+          }}
+        > Clear All
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setTasks(tasks.map(task => ({ ...task, done: false })))}
+          style={{
+            width: "100px",
+            height: "24px",
+            fontSize: "14px",
+            borderRadius: "4px",
+            cursor: "pointer",
+            alignItems: "center",
+            justifyContent: "center",
+            textAlign: "center", // Center the text
+            padding: 0,          // Remove extra padding
+            display: "inline-block", // Ensure proper centering
+            marginRight: "10px", // Add margin for spacing
+          }}
+        > Undo Check
+        </button>
+
+        <input
+          className="led-input"
+          value={newTask}
+          placeholder="Enter a new task here..."
+          onChange={(e) => setNewTask(e.target.value)}
+          style={{
+            border: "1px solid #ccc",
+            borderRadius: "4px",
+            padding: "6px 10px",
+            outline: "none",
+          }} />
+        <button
+          type="button"
+          onClick={() => setTasks(tasks.map(task => ({ ...task, done: true })))}
+          style={{
+            width: "130px",
+            height: "24px",
+            fontSize: "14px",
+            borderRadius: "4px",
+            cursor: "pointer",
+            alignItems: "center",
+            justifyContent: "center",
+            textAlign: "center", // Center the text
+            padding: 0,          // Remove extra padding
+            display: "inline-block", // Ensure proper centering
+            marginLeft: "10px",
+          }}
         >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+          Mark all as done
+        </button>
+      </form>
     </div>
-  );
+
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+      {displayTasks.map((task, index) => (
+        <div
+          key={index}
+        >
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <input
+              type="checkbox"
+              name={task.text}
+              checked={task.done}
+              disabled={tasks.length === 0} // Disable for example tasks
+              onChange={() => {
+                if (tasks.length === 0) return; // Prevent toggling example tasks
+                setTasks(tasks.map((t, i) =>
+                  i === index ? { ...t, done: !t.done } : t
+                ));
+              }}
+            />
+            <span style={{ margin: "0 8px" }}>{task.text}</span>
+            <button
+              type="button"
+              onClick={() => {
+                setTasks(tasks.filter((_, i) => i !== index));
+              }}
+              style={{
+                width: "12px",
+                height: "12px",
+                fontSize: "10px",
+                borderRadius: "4px",
+                cursor: "pointer",
+                alignItems: "center",
+                justifyContent: "center",
+                textAlign: "center", // Center the text
+                padding: 0,          // Remove extra padding
+                display: "flex", // Ensure proper centering
+              }}
+            >
+              -
+            </button>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
 }
